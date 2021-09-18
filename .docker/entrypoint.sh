@@ -1,9 +1,8 @@
 #!/bin/bash
 
-if [ ! -f ".env.local" ]; then
-  cp .env.local.example .env.local
+if [ ! -f ".env" ]; then
+  cp .env.example .env
 fi
 
-npm install
-
-npm run dev
+yarn install
+yarn dev
