@@ -6,7 +6,7 @@ import {
   SearchState,
   SortingState,
 } from '@devexpress/dx-react-grid';
-import { Button, Container, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import {
   Grid,
   Table,
@@ -24,6 +24,7 @@ import { useRouter } from 'next/dist/client/router';
 import { Transaction } from '../../interfaces/interfaces';
 import { Token, validateAuth } from '../../utils/auth';
 import makeHttp from '../../utils/http';
+import { Page } from '../../components/Page';
 
 interface TransactionsPageProps {
   transactions: Transaction[];
@@ -73,7 +74,7 @@ const TransactionsPage: NextPage<TransactionsPageProps> = (props) => {
   const router = useRouter();
 
   return (
-    <Container>
+    <Page>
       <Typography component="h1" variant="h4">
         Minhas Transações
       </Typography>
@@ -99,7 +100,7 @@ const TransactionsPage: NextPage<TransactionsPageProps> = (props) => {
         <PagingPanel />
         <IntegratedPaging />
       </Grid>
-    </Container>
+    </Page>
   );
 }
 

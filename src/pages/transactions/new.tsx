@@ -11,6 +11,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import makeHttp from "../../utils/http";
 import { useKeycloak } from "@react-keycloak/ssr";
+import { Page } from "../../components/Page";
 
 const NewTransaction: NextPage = () => {
   const { register, handleSubmit } = useForm();
@@ -36,7 +37,7 @@ const NewTransaction: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Page>
       <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container>
           <Grid item xs={12} md={6}>
@@ -115,7 +116,7 @@ const NewTransaction: NextPage = () => {
           </Grid>
         </Grid>
       </form>
-    </Container>
+    </Page>
   );
 }
 
