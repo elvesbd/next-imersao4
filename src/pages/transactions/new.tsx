@@ -5,19 +5,43 @@ import AddIcon from "@material-ui/icons/Add";
 
 
 import { useRouter } from 'next/dist/client/router';
-import { Transaction, TransactionCategoryLabels, TransactionTypeLabels } from '../../interfaces/interfaces';
+import {TransactionCategoryLabels, TransactionTypeLabels } from '../../interfaces/interfaces';
 import http from '../../utils/http';
 import React from "react";
+import { useForm } from "react-hook-form";
+import makeHttp from "../../utils/http";
+import { useKeycloak } from "@react-keycloak/ssr";
 
 const NewTransaction: NextPage = () => {
+  const { register, handleSubmit } = useForm();
+  const { initialized, keycloak } = useKeycloak();
   const router = useRouter();
+
+  async function onSubmit(data: any) {
+    try {
+      await makeHttp().post("transactions", data);
+      router.push("/transactions");
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  if (
+    typeof window !== "undefined" &&
+    initialized &&
+    !keycloak?.authenticated
+  ) {
+    router.replace(`/login?from=${window!.location.pathname}`);
+    return null;
+  }
 
   return (
     <Container>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container>
           <Grid item xs={12} md={6}>
             <TextField
+            {...register("payment_date")}
               type="date"
               required
               label="Data pagamento"
@@ -28,6 +52,7 @@ const NewTransaction: NextPage = () => {
             />
 
             <TextField
+            {...register("name")}
               label="Nome"
               required
               fullWidth
@@ -35,12 +60,14 @@ const NewTransaction: NextPage = () => {
             />
 
             <TextField
+            {...register("description")}
               label="Descrição"
               required
               fullWidth
             />
 
             <TextField
+            {...register("category")}
               select
               required
               label="Categoria"
@@ -54,6 +81,7 @@ const NewTransaction: NextPage = () => {
             </TextField>
 
             <TextField
+            {...register("amount", { valueAsNumber: true })}
               required
               type="number"
               label="Valor"
@@ -61,6 +89,7 @@ const NewTransaction: NextPage = () => {
             />
 
             <TextField
+            {...register("type")}
               select
               required
               label="Tipo de operação"

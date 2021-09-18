@@ -23,7 +23,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { useRouter } from 'next/dist/client/router';
 import { Transaction } from '../../interfaces/interfaces';
 import { Token, validateAuth } from '../../utils/auth';
-import http from '../../utils/http';
+import makeHttp from '../../utils/http';
 
 interface TransactionsPageProps {
   transactions: Transaction[];
@@ -42,8 +42,19 @@ const columns: Column[] = [
     title: 'Nome'
   },
   {
+    name: 'description',
+    title: 'Descrição'
+  },
+  {
     name: 'category',
     title: 'Categoria'
+  },
+  {
+    name: 'amount',
+    title: 'Valor',
+    getCellValue: (row: any, columnName: string) => {
+      return (row[columnName].toLocaleString('pt-br',{style: 'currency', currency: 'BRL'}));
+    },
   },
   {
     name: 'type',
@@ -78,7 +89,7 @@ const TransactionsPage: NextPage<TransactionsPageProps> = (props) => {
 
       <Grid rows={props.transactions} columns={columns}>
         <Table />
-        <SearchState defaultValue="Paris"/>
+        <SearchState defaultValue=""/>
         <SortingState defaultSorting={[{ columnName: 'created_at', direction: 'asc'}]}/>
         <PagingState defaultCurrentPage={0} pageSize={5}/>
         <TableHeaderRow showSortingControls/>
@@ -108,11 +119,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const token = (auth as Token).token;
 
-  const { data: transactions } = await http.get('transactions', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
+  const { data: transactions } = await makeHttp(token).get("transactions");
 
   return {
     props: {
