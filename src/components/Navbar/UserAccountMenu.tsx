@@ -27,9 +27,9 @@ const UserAccountMenu: React.FunctionComponent = () => {
         transformOrigin={{ vertical: "top", horizontal: "center" }}
         getContentAnchorEl={null}
       >
-        <MenuItem disabled={true}>
+        {/* <MenuItem disabled={true}>
           {(keycloak?.idTokenParsed as any).family_name}
-        </MenuItem>
+        </MenuItem> */}
         <Divider />
         <MenuItem onClick={() => router.push("/logout")}>Logout</MenuItem>
       </Menu>
