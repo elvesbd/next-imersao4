@@ -20,6 +20,8 @@ const Navbar: React.FunctionComponent = () => {
   const tenant = useContext(TenantContext);
   const classes = useStyles();
 
+console.log('Navbar', tenant)
+
   return initialized && keycloak?.authenticated && tenant ? (
     <div className={classes.root}>
       <AppBar position="static">
@@ -27,7 +29,7 @@ const Navbar: React.FunctionComponent = () => {
           <Menu />
           <StoreIcon />
           <Typography component="h1" variant="h6" className={classes.title}>
-            Fincycle - {tenant.name}
+            Fincycle - { tenant.name }
           </Typography>
           <Typography>Saldo R$ {tenant.balance}</Typography>
           <UserAccountMenu />
