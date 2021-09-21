@@ -25,6 +25,7 @@ import { Transaction } from '../../interfaces/interfaces';
 import { Token, validateAuth } from '../../utils/auth';
 import makeHttp from '../../utils/http';
 import { Page } from '../../components/Page';
+import { withAuth } from '../../hof/withAuth';
 
 interface TransactionsPageProps {
   transactions: Transaction[];
@@ -106,25 +107,12 @@ const TransactionsPage: NextPage<TransactionsPageProps> = (props) => {
 
 export default TransactionsPage;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const auth  = validateAuth(ctx.req);
-
-  if (!auth) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      }
-    }
-  }
-
-  const token = (auth as Token).token;
-
+export const getServerSideProps = withAuth(async (ctx, { token }) => {
   const { data: transactions } = await makeHttp(token).get("transactions");
 
   return {
     props: {
-      transactions
-    }
-  }
-}
+      transactions,
+    },
+  };
+});
